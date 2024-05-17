@@ -109,6 +109,7 @@ run_hook("admin_edituser_beforeactions",array("user"=>$user));
     printf("  <td><a href='users.php?id=%d'>%s</a></td>",$t->id,_html($t->username));
     printf("  <td>%s</td>",_html($t->nickname));
     printf("  <td>%s</td>",_html($t->group));
+    printf("  <td>%s</td>",_html($t->remote ? "remote" : "local"));
   //  printf("  <td>%s</td>",$t->regip);
     printf("  <td>%s</td>",_html($t->regtime));
     printf("  <td>%d votes</td>",_html($t->votes));

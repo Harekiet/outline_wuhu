@@ -1,4 +1,7 @@
 <?php
+
+include "sceneid.php";
+
 if (!defined("ADMIN_DIR")) exit();
 
 if (is_user_logged_in())
@@ -8,12 +11,11 @@ if (is_user_logged_in())
 
 run_hook("login_start");
 
-if (@$_POST["login"])
+if ($_POST["login"])
 {
   $_SESSION["logindata"] = NULL;
 
-  $user = SQLLib::selectRow(sprintf_esc("select id from users where `username`='%s' and `password`='%s'",$_POST["login"],hashPassword($_POST["password"])));
-  $userID = $user ? $user->id : 0;
+  $userID = SQLLib::selectRow(sprintf_esc("select id from users where `username`='%s' and `password`='%s' and `remote`='0'",$_POST["login"],hashPassword($_POST["password"])))->id;
 
   run_hook("login_authenticate",array("userID"=>&$userID));
 
@@ -28,10 +30,13 @@ if (@$_POST["login"])
   }
   exit();
 }
-if (@$_GET["login"]=="failure")
+
+if ($_GET["login"]=="failure")
   echo "<div class='error'>Login failed!</div>";
 ?>
-<form method="post" id='loginForm'>
+
+<p> Login Local </p>
+<form action="<?=build_url("Login")?>" method="post" id='loginForm'>
 <div>
   <label for="loginusername">Username:</label>
   <input id="loginusername" name="login" type="text" required='yes' />
@@ -41,9 +46,16 @@ if (@$_GET["login"]=="failure")
   <input id="loginpassword" name="password" type="password" required='yes' />
 </div>
 <div>
+<br />
   <input type="submit" value="Go!" />
 </div>
 </form>
+<p> Login Remote </p>
+
+<div style="image-rendering: auto; text-align: left">
+	<a href="/index.php?page=Login&sceneid=1"><img alt="scene id" src="include/SceneID_Icon_300x48.png"></a>
+</div>
+
 <?php
 run_hook("login_end");
 ?>

@@ -413,9 +413,18 @@ function get_user_id()
   return (int)(@$_SESSION["logindata"] ? $_SESSION["logindata"]->id : 0);
 }
 
+function can_user_vote()
+{
+  if (!(int)(@$_SESSION["logindata"]))
+    return 0;
+  if ($_SESSION["logindata"]->remote)
+    return 0;
+  return 1;
+}
+
+
 function get_current_user_data()
 {
-  //return $_SESSION["logindata"];
   return SQLLib::selectRow(sprintf_esc("select * from users where id=%d",get_user_id()));
 }
 

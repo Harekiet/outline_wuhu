@@ -67,6 +67,7 @@ if (@$_POST["username"])
       "group"=> ($_POST["group"]),
       "regip"=> ($_SERVER["REMOTE_ADDR"]),
       "regtime"=> (date("Y-m-d H:i:s")),
+      "remote"=> 0,
     );
     $error = "";
     run_hook("register_processdata",array("data"=>&$userdata));

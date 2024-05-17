@@ -6,6 +6,12 @@ $voter = SpawnVotingSystem();
 if (!$voter)
   die("VOTING SYSTEM ERROR");
 
+if ( !can_user_vote())  {
+  echo "<div class='failure'>You're not allowed to vote</div>";
+  return;
+}
+
+
 $csrf = new CSRFProtect();
 
 if (@$_POST["vote"])
@@ -28,6 +34,7 @@ if (@$_POST["vote"])
     echo "<div class='failure'>Your CSRF token expired!</div>";
   }
 }
+
 if (@$_GET["success"])
 {
   echo "<div class='success'>Votes saved!</div>";
