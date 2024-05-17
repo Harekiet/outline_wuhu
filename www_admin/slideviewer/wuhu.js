@@ -8,7 +8,10 @@ var WuhuSlideSystem = Class.create({
 	  {
 	    var h = this.revealOptions.height;
 	    var containerHeight = container.getLayout().get("height");
+/*	    
+	Don't hard set this style
         container.style.top = Math.floor((h - containerHeight) / 2) + 'px';
+*/
 	  }
     },this);
   },
@@ -420,7 +423,7 @@ var WuhuSlideSystem = Class.create({
 
       loop: true,
 
-      autoSlide: 10000,
+      autoSlide: 15000,
       autoSlideStoppable: false,
 
       width: this.options.width,
@@ -470,10 +473,7 @@ var WuhuSlideSystem = Class.create({
       }
       if (ev.keyCode == 'P'.charCodeAt(0))
       {
-        if (!Reveal.autoSlidePaused)
-          Reveal.pauseAutoSlide();
-        else
-          Reveal.resumeAutoSlide();
+         Reveal.toggleAutoSlide();
       }
       if (ev.keyCode == 'T'.charCodeAt(0))
       {
