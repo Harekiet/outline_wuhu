@@ -1,0 +1,140 @@
+/** you can use this to hide the mouse cursor entirely */
+/* body { cursor: none; } */
+
+
+/*
+    Main bodies of the slides
+*/
+
+.reveal .slides > section.rotationSlide.text,
+.reveal .slides > section.announcementSlide,
+.reveal .slides > section.countdownSlide,
+.reveal .slides > section.compoDisplaySlide,
+.reveal .slides > section.prizegivingSlide,
+.dummy
+{
+    background-image: url("slide.png");
+    color: black;
+    font-weight: 300;
+    text-shadow: unset;
+}
+
+/*
+    Slide Intro/Outro
+*/
+
+.reveal .slides > section.compoDisplaySlide.intro div.container,
+.reveal .slides > section.prizegivingSlide.intro div.container,
+.reveal .slides > section.compoDisplaySlide.outro div.container,
+.reveal .slides > section.prizegivingSlide.outro div.container,
+.dummy
+{
+    top:300px;
+    height:700px;
+}
+
+.reveal .slides > section div.container,
+.dummy
+{
+    top:200px;
+    margin-right:120px;
+}
+
+/*
+    Container for Entries
+*/
+
+.reveal .slides > section.compoDisplaySlide.entry div.container,
+.reveal .slides > section.prizegivingSlide.entry div.container,
+.dummy
+{
+    top:300px;
+    height:700px;
+}
+
+/* Slide Number */
+
+.reveal .slides > section.compoDisplaySlide.entry .number,
+.reveal .slides > section.prizegivingSlide.entry .ranking,
+.dummy
+{
+    float:left;
+    width:260px;
+    height:1080px;
+
+    margin-left:160px;
+    font-size: 256px;
+    font-weight: bold;
+    text-align: left;
+}
+
+/* Slide Title */
+.reveal .slides > section.compoDisplaySlide.entry .title,
+.reveal .slides > section.prizegivingSlide.entry .title,
+.dummy
+{
+/*    top: 100px; */
+/*    left: 300px; */
+/*    position: fixed; */
+    font-size: 96px;
+    height:120px;
+}
+
+/* Slide Author */
+.reveal .slides > section.compoDisplaySlide.entry .author,
+.reveal .slides > section.prizegivingSlide.entry .title,
+.dummy
+{
+/*
+    top: 300px;
+    left: 300px;
+    position: fixed;
+*/
+    height:120px;
+    font-size: 96px;
+}
+
+/* Slide Comment */
+.reveal .slides > section.compoDisplaySlide.entry .comment,
+.reveal .slides > section.prizegivingSlide.entry .comment,
+.dummy
+{
+    margin-top:20px;
+    font-size: 32px;
+    width:1500px;
+}
+
+
+
+/* Event Title */
+.reveal .slides > section.compoDisplaySlide.entry .eventName,
+.reveal .slides > section.prizegivingSlide.entry .eventName,
+.dummy
+{
+/*
+  display: flex;
+  align-items: center;
+*/
+
+  text-shadow: unset;
+  color: black;
+  font-size: 120px;
+  font-weight: bold;
+  line-height: 110px; 
+  position: fixed;
+  text-align: center;
+  vertical-align: middle;
+/*  bottom: unset; */
+  width:100%
+  right:unset;
+  top:900px;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  margin: 0 auto;
+}
+
+
+body 
+{
+  color: #00ff00;
+}
