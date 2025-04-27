@@ -82,6 +82,12 @@ a {
 <body>
 
 <?php
+function parse_php_size_setting( $str )
+{
+  $unit = (int)stripos( "bkmgtpezy", substr( $str, -1 ) );
+  return (float)$str * pow(1024,$unit);
+}
+
 $_POST = clearArray($_POST);
 function perform(&$msg) {
   $msg = "";
@@ -120,6 +126,11 @@ function perform(&$msg) {
 
   if (!is_writable($_POST["private_ftp_dir"]."/")) {
     $msg = "Unable to write into compo entry directory!";
+    return 0;
+  }
+
+  if (disk_free_space($_POST["private_ftp_dir"])<1024*1024*1024) {
+    $msg = "Your compo entry dir has less than 1GB space left!";
     return 0;
   }
 
@@ -197,15 +208,30 @@ function perform(&$msg) {
   file_put_contents("database.inc.php",$db);
   file_put_contents($_POST["main_www_dir"]."/database.inc.php",$db);
 
-  if ($_POST["admin_username"] && $_POST["admin_password"] ) {
+  if ($_POST["admin_username"] && $_POST["admin_password"] ) 
+  {
     $htaccess =
-    "AuthUserFile ".dirname($_SERVER["SCRIPT_FILENAME"])."/.htpasswd\n".
-    "AuthGroupFile /dev/null\n".
-    "AuthName 'Wuhu Virtual Organizer Area - Enter password to continue'\n".
-    "AuthType Basic\n".
-    "\n".
-    "require valid-user\n";
-
+      "AuthUserFile ".dirname($_SERVER["SCRIPT_FILENAME"])."/.htpasswd\n".
+      "AuthGroupFile /dev/null\n".
+      "AuthName 'Wuhu Virtual Organizer Area - Enter password to continue'\n".
+      "AuthType Basic\n".
+      "\n".
+      "<If \"%{REQUEST_FILENAME} =~ m#beamer\\.php$# || %{REQUEST_FILENAME} =~ m#slides\\.php$#\">\n".
+      "  <LimitExcept OPTIONS>\n".
+      "    require valid-user\n".
+      "  </LimitExcept>\n".
+      "</If>\n".
+      "<Else>\n".
+      "  require valid-user\n".
+      "</Else>\n".
+      "\n".
+      "<IfModule mod_headers.c>\n".
+      "  Header always set Access-Control-Allow-Origin \"*\"\n".  // TODO: maybe narrow this?
+      "  Header always set Access-Control-Allow-Methods \"*\"\n".
+      "  Header always set Access-Control-Allow-Headers \"*\"\n".
+      "  Header always set Access-Control-Allow-Credentials \"true\"\n".
+      "</IfModule>\n";
+    
     file_put_contents(".htaccess",$htaccess);
 
     $htpasswd = $_POST["admin_username"] . ":" . password_hash($_POST["admin_password"], PASSWORD_DEFAULT);
@@ -239,27 +265,31 @@ if (!empty($_POST["main_www_dir"])) {
 }
 
 if (!function_exists("mysqli_connect")) {
-  echo "<div class='error'>mysqli_connect not found - do you have the mysqli extension enabled?</div>";
+  printf("<div class='error'>mysqli_connect not found - do you have the mysqli extension enabled?</div>\n");
 }
 
 if (!function_exists("imagecopyresampled")) {
-  echo "<div class='error'>imagecopyresampled not found - do you have the gd extension enabled?</div>";
+  printf( "<div class='error'>imagecopyresampled not found - do you have the gd extension enabled?</div>\n");
 }
 
-if ((int)ini_get("post_max_size")<64) {
-  echo "<div class='error'>post_max_size is smaller than 64MB - this can cause a problem</div>";
+if (parse_php_size_setting(ini_get("post_max_size"))<64*1024*1024) {
+  printf( "<div class='error'>post_max_size (%s) is smaller than 64MB - this can cause a problem</div>\n",ini_get("post_max_size"));
 }
 
-if ((int)ini_get("upload_max_filesize")<64) {
-  echo "<div class='error'>upload_max_filesize is smaller than 64MB - this can cause a problem</div>";
+if (parse_php_size_setting(ini_get("upload_max_filesize"))<64*1024*1024) {
+  printf( "<div class='error'>upload_max_filesize (%s) is smaller than 64MB - this can cause a problem</div>\n",ini_get("upload_max_filesize"));
 }
 
-if ((int)ini_get("memory_limit")<64) {
-  echo "<div class='error'>memory_limit is smaller than 64MB - this can cause a problem</div>";
+if (parse_php_size_setting(ini_get("memory_limit"))<64*1024*1024) {
+  printf( "<div class='error'>memory_limit (%s) is smaller than 64MB - this can cause a problem</div>\n",ini_get("memory_limit"));
 }
 
 if ((int)ini_get("session.gc_maxlifetime")<60*60*24) {
-  echo "<div class='error'>session.gc_maxlifetime is smaller than 24 hours - this will be annoying for your visitors</div>";
+  printf( "<div class='error'>session.gc_maxlifetime (%s) is smaller than 24 hours - this will be annoying for your visitors</div>\n",ini_get("session.gc_maxlifetime"));
+}
+
+if (disk_free_space(sys_get_temp_dir())<64*1024*1024) {
+  printf("<div class='error'>'%s' has less than 64MB space left! This will potentially break uploads!</div>\n",sys_get_temp_dir());
 }
 
 ?>

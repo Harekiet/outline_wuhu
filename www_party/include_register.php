@@ -58,6 +58,7 @@ function validate()
 $success = false;
 if (@$_POST["username"]) 
 {
+  SQLLib::Query("LOCK TABLE votekeys WRITE, users WRITE");
   if (validate())
   {
     $userdata = array(
@@ -84,6 +85,7 @@ if (@$_POST["username"])
       echo "<div class='failure'>"._html($error)."</div>";
     }
   }
+  SQLLib::Query("UNLOCK TABLES");
 }
 if(!$success)
 {

@@ -25,7 +25,7 @@ function perform(&$msg)
     return $out["entryID"];
   }
 
-  $msg = $out["error"];
+  $msg = $out["error"] ?? "Unknown error";
   return 0;
 }
 if ($_POST) 
@@ -38,7 +38,7 @@ if ($_POST)
   } 
   else 
   {
-    echo "<div class='failure'>".$msg."</div>";
+    echo "<div class='failure'>".($msg ?? "There was an error!")."</div>";
   }
 }
 
