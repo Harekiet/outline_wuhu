@@ -3,12 +3,12 @@
 // https://oauth2-client.thephpleague.com/usage/
 //Include ouath2 league client from the docker php image
 
-include "/oauth/vendor/autoload.php";
+include "/composer/vendor/autoload.php";
 
 $provider = new \League\OAuth2\Client\Provider\GenericProvider([
 'clientId'                => '',    // The client ID assigned to you by the provider
 'clientSecret'            => '',    // The client password assigned to you by the provider
-'redirectUri'             => 'https://party.outlinedemoparty.nl/index.php?page=Login',	// The Site to redirect to once logged in
+'redirectUri'             => 'https://party.outlinedemoparty.nl/index.php?page=Login',
 'urlAuthorize'            => 'https://id.scene.org/oauth/authorize/?scope=basic user:email',
 'urlAccessToken'          => 'https://id.scene.org/oauth/token/',
 'urlResourceOwnerDetails' => 'https://id.scene.org/oauth/tokeninfo/',
