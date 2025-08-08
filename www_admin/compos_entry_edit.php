@@ -1,5 +1,6 @@
 <?php
   include_once("bootstrap.inc.php");
+  include_once("fileSend.php");
 
   if (@$_GET["download"])
   {
@@ -7,17 +8,26 @@
     $dirname = get_compoentry_dir_path($entry);
     
     $path = $dirname . $entry->filename;
-    if (($data = @file_get_contents($path)) === false) {
-      include_once("header.inc.php");
-      printf("<div class='error'>Failed to read %s</div>",$path);
+    if ($path && strpos($path, realpath($dirname)) === 0) {
+      send_file($path);
     } else {
-      header("Content-type: application/octet-stream");
-      header("Content-disposition: attachment; filename=\"".basename($entry->filename)."\"");
-      header("Content-length: ".filesize($path));
-      echo $data;
+       include_once("header.inc.php");
+       printf("<div class='error'>Failed to read %s</div>",$path);
     }
     exit();
   }
+
+//    if (($data = @file_get_contents($path)) === false) {
+//      include_once("header.inc.php");
+//      printf("<div class='error'>Failed to read %s</div>",$path);
+//    } else {
+//      header("Content-type: application/octet-stream");
+//      header("Content-disposition: attachment; filename=\"".basename($entry->filename)."\"");
+//      header("Content-length: ".filesize($path));
+//      echo $data;
+//    }
+//    exit();
+//  }
   
   if (@$_GET["select"])
   {
